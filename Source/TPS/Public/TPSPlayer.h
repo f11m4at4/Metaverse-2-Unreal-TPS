@@ -26,4 +26,19 @@ public:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
+public:
+	// 필요한 컴포넌트 선언
+	UPROPERTY(VisibleAnywhere)
+	class USpringArmComponent* springArmComp;
+	UPROPERTY(VisibleAnywhere)
+	class UCameraComponent* tpsCamComp;
+
+public:
+	// 사용자 입력처리 함수
+	// 좌우이동
+	void Horizontal(float value);
+	void Vertical(float value);
+	// 마우스에 따른 회전
+	void Turn(float value);
+	void Lookup(float value);
 };
