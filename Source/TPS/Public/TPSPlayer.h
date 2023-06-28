@@ -6,6 +6,8 @@
 #include "GameFramework/Character.h"
 #include "TPSPlayer.generated.h"
 
+// 사용자가 발사버튼을 누르면 총알을 발사하고 싶다.
+// 필요속성 : 총알공장
 UCLASS()
 class TPS_API ATPSPlayer : public ACharacter
 {
@@ -32,6 +34,9 @@ public:
 	class USpringArmComponent* springArmComp;
 	UPROPERTY(VisibleAnywhere)
 	class UCameraComponent* tpsCamComp;
+	// 유탄총
+	UPROPERTY(VisibleAnywhere)
+	class USkeletalMeshComponent* gunMeshComp;
 
 public:
 	// 사용자 입력처리 함수
@@ -41,4 +46,11 @@ public:
 	// 마우스에 따른 회전
 	void Turn(float value);
 	void Lookup(float value);
+	
+	// 총알발사 기능
+	void InputFire();
+
+	// 필요속성 : 총알공장
+	UPROPERTY(EditDefaultsOnly, Category="Bullet")
+	TSubclassOf<class ABullet> bulletFactory;
 };
