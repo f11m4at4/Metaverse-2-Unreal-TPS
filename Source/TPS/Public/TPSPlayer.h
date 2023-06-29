@@ -32,7 +32,7 @@ public:
 	// ÇÊ¿äÇÑ ÄÄÆ÷³ÍÆ® ¼±¾ð
 	UPROPERTY(VisibleAnywhere)
 	class USpringArmComponent* springArmComp;
-	UPROPERTY(VisibleAnywhere)
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	class UCameraComponent* tpsCamComp;
 	// À¯ÅºÃÑ
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
