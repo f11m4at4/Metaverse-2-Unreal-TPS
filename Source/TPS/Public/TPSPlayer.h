@@ -35,8 +35,11 @@ public:
 	UPROPERTY(VisibleAnywhere)
 	class UCameraComponent* tpsCamComp;
 	// 유탄총
-	UPROPERTY(VisibleAnywhere)
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	class USkeletalMeshComponent* gunMeshComp;
+	// 스나이퍼건
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	class UStaticMeshComponent* sniperGunComp;
 
 public:
 	// 사용자 입력처리 함수
@@ -49,6 +52,11 @@ public:
 	
 	// 총알발사 기능
 	void InputFire();
+
+	void ChangeToGrenade();
+	void ChangeToSniper();
+	// 총바꾸기
+	void ChangeGun(bool isGrenade);
 
 	// 필요속성 : 총알공장
 	UPROPERTY(EditDefaultsOnly, Category="Bullet")
