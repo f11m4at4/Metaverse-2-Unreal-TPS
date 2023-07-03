@@ -7,6 +7,8 @@
 #include <Components/CapsuleComponent.h>
 #include <Components/SkeletalMeshComponent.h>
 #include "Bullet.h"
+#include <Kismet/GameplayStatics.h>
+#include <UMG/Public/Blueprint/UserWidget.h>
 
 // Sets default values
 ATPSPlayer::ATPSPlayer()
@@ -68,6 +70,14 @@ void ATPSPlayer::BeginPlay()
 {
 	Super::BeginPlay();
 	
+	// crosshair ui 인스턴스 만들기
+	crosshairUI = CreateWidget(GetWorld(), crosshairUIFactory);
+
+	if (crosshairUI != nullptr)
+	{
+		crosshairUI->AddToViewport();
+	}
+
 	ChangeToSniper();
 }
 
@@ -116,19 +126,62 @@ void ATPSPlayer::Lookup(float value)
 
 void ATPSPlayer::InputFire()
 {
-	// 총알 발사하고 싶다.
-	FTransform firePosition = gunMeshComp->GetSocketTransform(TEXT("FirePosition"));
-	GetWorld()->SpawnActor<ABullet>(bulletFactory, firePosition);
+	// 유탄총 사용중일때 유탄 발사
+	if (bUseGrenadeGun)
+	{
+		// 총알 발사하고 싶다.
+		FTransform firePosition = gunMeshComp->GetSocketTransform(TEXT("FirePosition"));
+		GetWorld()->SpawnActor<ABullet>(bulletFactory, firePosition);
+	}
+	// 그렇지 않으면 스나이퍼건 발사
+	else
+	{
+		// LineTrace 를 쏴서 부딪힌 지점에 파편효과 발생시키고 싶다.
+		// 1. 시작점이 필요하다.
+		FVector startPos = tpsCamComp->GetComponentLocation();
+		// 2. 종료점이 필요하다.
+		FVector endPos = startPos + tpsCamComp->GetForwardVector() * 5000;
+		// 3. 선을 만들어서 쏜다.
+		FHitResult hitInfo;
+		//   -> 나는 안맞게 하고 싶다.
+		FCollisionQueryParams param;
+		param.AddIgnoredActor(this);
+		bool bHit = GetWorld()->LineTraceSingleByChannel(hitInfo, startPos, endPos, ECC_Visibility, param);
+		// 4. 선이 부딪혔으니까
+		if (bHit)
+		{
+			// 5. 부딪힌 물체 날려보내기
+			// 부딪힌 녀석의 컴포넌트가 SimulatePhysics 가 활성화 되어 있어야한다.
+			// -> 부딪힌 녀석의 컴포넌트가 필요하다.
+			auto hitComp = hitInfo.GetComponent();
+			// -> 물리활성화 돼 있는지 체크하고 싶다.
+			if (hitComp->IsSimulatingPhysics())
+			{
+				// 그녀석 날려보내자
+				// P = P0 + vt, v = v0 + at, F = ma
+				FVector force = hitComp->GetMass() * tpsCamComp->GetForwardVector() * 500000;
+				hitComp->AddForceAtLocation(force, hitInfo.ImpactPoint);
+			}
+			// 6. 파편효과 발생
+			FTransform trans;
+			trans.SetLocation(hitInfo.ImpactPoint);
+			trans.SetRotation(hitInfo.ImpactNormal.ToOrientationQuat());
+			UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), bulletEffectFactory, trans);
+		}
+		
+	}
 }
 
 void ATPSPlayer::ChangeToGrenade()
 {
+	bUseGrenadeGun = true;
 	ChangeGun(true);
 
 }
 
 void ATPSPlayer::ChangeToSniper()
 {
+	bUseGrenadeGun = false;
 	ChangeGun(false);
 }
 

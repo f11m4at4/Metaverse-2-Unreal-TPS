@@ -61,4 +61,18 @@ public:
 	// 필요속성 : 총알공장
 	UPROPERTY(EditDefaultsOnly, Category="Bullet")
 	TSubclassOf<class ABullet> bulletFactory;
+
+	// 현재 유탄발사총을 사용중인지 기억 flag
+	bool bUseGrenadeGun = false;
+
+	UPROPERTY(EditDefaultsOnly, Category="Effect")
+	class UParticleSystem* bulletEffectFactory;
+
+	// crosshair ui 파일
+	UPROPERTY(EditDefaultsOnly, Category="UI")
+	TSubclassOf<class UUserWidget> crosshairUIFactory;
+
+	// crosshair factory로부터 만들어진 인스턴스
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="UI")
+	class UUserWidget* crosshairUI;
 };
