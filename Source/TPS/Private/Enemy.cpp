@@ -2,6 +2,7 @@
 
 
 #include "Enemy.h"
+#include "EnemyFSM.h"
 
 // Sets default values
 AEnemy::AEnemy()
@@ -13,16 +14,13 @@ AEnemy::AEnemy()
 	ConstructorHelpers::FObjectFinder<USkeletalMesh> TempMesh(TEXT("/Script/Engine.SkeletalMesh'/Game/Characters/Mannequin_UE4/Meshes/SK_Mannequin.SK_Mannequin'"));
 
 	if (TempMesh.Succeeded())
-
-
-
-
-
-
 	{
 		GetMesh()->SetSkeletalMesh(TempMesh.Object);
 		GetMesh()->SetRelativeLocationAndRotation(FVector(0, 0, -90), FRotator(0, -90, 0));
 	}
+
+	// FSM
+	FSM = CreateDefaultSubobject<UEnemyFSM>(TEXT("FSM"));
 }
 
 // Called when the game starts or when spawned
@@ -37,25 +35,7 @@ void AEnemy::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	// FSM ¸ñÂ÷
-	switch (mState)
-	{
-	case EEnemyState::Idle:
-		IdleState();
-		break;
-	case EEnemyState::Move:
-		MoveState();
-		break;
-	case EEnemyState::Attack:
-		AttackState();
-		break;
-	case EEnemyState::Damage:
-		DamageState();
-		break;
-	case EEnemyState::Die:
-		DieState();
-		break;
-	}
+	
 }
 
 // Called to bind functionality to input
@@ -65,28 +45,5 @@ void AEnemy::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 
 }
 
-void AEnemy::IdleState()
-{
 
-}
-
-void AEnemy::MoveState()
-{
-
-}
-
-void AEnemy::AttackState()
-{
-
-}
-
-void AEnemy::DamageState()
-{
-
-}
-
-void AEnemy::DieState()
-{
-
-}
 

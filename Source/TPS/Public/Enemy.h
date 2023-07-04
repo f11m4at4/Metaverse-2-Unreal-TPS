@@ -6,16 +6,6 @@
 #include "GameFramework/Character.h"
 #include "Enemy.generated.h"
 
-// enemy 의 상태를 나타낼 enum 자료형 만들기
-UENUM(BlueprintType)
-enum class EEnemyState : uint8
-{
-	Idle UMETA(DisplayName = "Idle State"),
-	Move,
-	Attack,
-	Damage,
-	Die
-};
 
 UCLASS()
 class TPS_API AEnemy : public ACharacter
@@ -38,13 +28,7 @@ public:
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
 public:
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="FSM")
-	EEnemyState mState = EEnemyState::Idle;
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	class UEnemyFSM* FSM;
 
-public:	// 상태 함수
-	void IdleState();
-	void MoveState();
-	void AttackState();
-	void DamageState();
-	void DieState();
 };
