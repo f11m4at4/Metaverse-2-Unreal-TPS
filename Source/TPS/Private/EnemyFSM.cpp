@@ -5,6 +5,7 @@
 #include "TPSPlayer.h"
 #include <Kismet/GameplayStatics.h>
 #include "Enemy.h"
+#include <Math/UnrealMathUtility.h>
 
 // Sets default values for this component's properties
 UEnemyFSM::UEnemyFSM()
@@ -80,8 +81,18 @@ void UEnemyFSM::MoveState()
 	Direction.Normalize();
 
 	// P = P0 + vt
-	FVector P = me->GetActorLocation() + Direction * speed * GetWorld()->DeltaTimeSeconds;
-	me->SetActorLocation(P);
+	/*FVector P = me->GetActorLocation() + Direction * speed * GetWorld()->DeltaTimeSeconds;
+	me->SetActorLocation(P);*/
+	me->AddMovementInput(Direction);
+
+	//Direction.Z = 0;
+	//// 타겟방향으로 회전하기
+	//// forward vector 가 d(irection 이 되고 싶다.
+	//FVector forward = me->GetActorForwardVector();
+	//forward = FMath::Lerp(forward, Direction, 5 * GetWorld()->DeltaTimeSeconds);
+
+	//// Enemy forward 벡터가 direction 방향으로 일치시키고싶다.
+	//me->SetActorRotation(forward.Rotation());
 }
 
 void UEnemyFSM::AttackState()
