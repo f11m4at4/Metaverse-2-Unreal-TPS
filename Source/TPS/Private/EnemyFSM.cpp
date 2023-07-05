@@ -6,6 +6,8 @@
 #include <Kismet/GameplayStatics.h>
 #include "Enemy.h"
 #include <Math/UnrealMathUtility.h>
+#include <DrawDebugHelpers.h>
+#include "TPS.h"
 
 // Sets default values for this component's properties
 UEnemyFSM::UEnemyFSM()
@@ -35,6 +37,12 @@ void UEnemyFSM::BeginPlay()
 void UEnemyFSM::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
+
+	// 공격범위를 시각화 해보자
+	if (bDebugAttackRange)
+	{
+		DrawDebugSphere(GetWorld(), me->GetActorLocation(), attackRange, 20, FColor::Red, false, -1, 0, 2);
+	}
 
 	// FSM 목차
 	switch (mState)
@@ -78,12 +86,27 @@ void UEnemyFSM::IdleState()
 void UEnemyFSM::MoveState()
 {
 	FVector Direction = target->GetActorLocation() - me->GetActorLocation();
+	float distance = Direction.Length();
 	Direction.Normalize();
+
+	me->AddMovementInput(Direction);
+
+	// 공격범위안에 들어오면 상태를 공격으로 전환하고 싶다.
+	// -> transition 조건
+	// 3. 나와 타겟과의 거리가 있어야한다.
+	// 2. 공격범위안에 들어와서
+	// -> 나와 타겟과의 거리가 공격범위보다 작다면
+	if (distance < attackRange)
+	{
+		// 1. 상태를 공격으로 전환하고 싶다.
+		mState = EEnemyState::Attack;
+	}
+
+	
 
 	// P = P0 + vt
 	/*FVector P = me->GetActorLocation() + Direction * speed * GetWorld()->DeltaTimeSeconds;
 	me->SetActorLocation(P);*/
-	me->AddMovementInput(Direction);
 
 	//Direction.Z = 0;
 	//// 타겟방향으로 회전하기
@@ -93,11 +116,26 @@ void UEnemyFSM::MoveState()
 
 	//// Enemy forward 벡터가 direction 방향으로 일치시키고싶다.
 	//me->SetActorRotation(forward.Rotation());
-}
+} 
 
+// 일정시간에 한번씩 공격하고 싶다.
 void UEnemyFSM::AttackState()
 {
+	currentTime += GetWorld()->DeltaTimeSeconds;
+	if (currentTime > attackDelayTime)
+	{
+		currentTime = 0;
+		PRINT_LOG(TEXT("Attack!!!!!!!!!!!!!"));
+	}
 
+	// 타겟이 도망가면 상태를 이동으로 전환하고 싶다.
+	float distance = FVector::Dist(target->GetActorLocation(), me->GetActorLocation());
+	// -> 타겟이 공격범위를 벗어나면
+	if (distance > attackRange)
+	{
+		mState = EEnemyState::Move;
+		currentTime = 0;
+	}
 }
 
 void UEnemyFSM::DamageState()
@@ -108,4 +146,10 @@ void UEnemyFSM::DamageState()
 void UEnemyFSM::DieState()
 {
 
+}
+
+// 피격시 호출될 콜백(이벤트) 함수
+void UEnemyFSM::OnDamageProcess()
+{
+	me->Destroy();
 }

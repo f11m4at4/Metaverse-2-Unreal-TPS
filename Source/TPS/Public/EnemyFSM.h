@@ -44,6 +44,8 @@ public:
 	float idleDelayTime = 2;
 	float currentTime = 0;
 
+	// ------------------------------------------- //
+	// 이동
 	// 필요속성 : 타겟, 이동속도
 	UPROPERTY()
 	class ATPSPlayer* target;
@@ -53,10 +55,28 @@ public:
 	UPROPERTY()
 	class AEnemy* me;
 
+
+	// 필요속성 : 공격범위
+	UPROPERTY(EditAnywhere, Category="FSM")
+	float attackRange = 2;
+
+	// 공격범위 시각화여부
+	UPROPERTY(EditAnywhere, Category="FSM")
+	bool bDebugAttackRange = false;
+
+	// ------------------------------------------- //
+	// 공격
+	// 필요속성 : 공격대기시간
+	UPROPERTY(EditAnywhere, Category="FSM")
+	float attackDelayTime = 2;
+
 public:	// 상태 함수
 	void IdleState();
 	void MoveState();
 	void AttackState();
 	void DamageState();
 	void DieState();
+
+	// 피격시 호출될 콜백(이벤트) 함수
+	void OnDamageProcess();
 };

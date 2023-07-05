@@ -9,6 +9,7 @@
 #include "Bullet.h"
 #include <Kismet/GameplayStatics.h>
 #include <UMG/Public/Blueprint/UserWidget.h>
+#include "EnemyFSM.h"
 
 // Sets default values
 ATPSPlayer::ATPSPlayer()
@@ -167,8 +168,23 @@ void ATPSPlayer::InputFire()
 			trans.SetLocation(hitInfo.ImpactPoint);
 			trans.SetRotation(hitInfo.ImpactNormal.ToOrientationQuat());
 			UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), bulletEffectFactory, trans);
+
+			OnEnemyHit(hitInfo);
 		}
 		
+	}
+}
+
+void ATPSPlayer::OnEnemyHit(const FHitResult& hitInfo)
+{
+	// 부딪힌 녀석이 Enemy 라면
+	auto enemy = hitInfo.GetActor();
+	// -> 부딪힌 녀석한테 EnemyFSM 컴포넌트를 요청하자.
+	auto enemyFsm = Cast<UEnemyFSM>(enemy->GetDefaultSubobjectByName(TEXT("FSM")));
+	// 콜백함수 호출해주기
+	if (enemyFsm != nullptr)
+	{
+		enemyFsm->OnDamageProcess();
 	}
 }
 

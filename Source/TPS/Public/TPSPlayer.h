@@ -53,6 +53,8 @@ public:
 	// ÃÑ¾Ë¹ß»ç ±â´É
 	void InputFire();
 
+	void OnEnemyHit(const FHitResult& hitInfo);
+
 	void ChangeToGrenade();
 	void ChangeToSniper();
 	// ÃÑ¹Ù²Ù±â
