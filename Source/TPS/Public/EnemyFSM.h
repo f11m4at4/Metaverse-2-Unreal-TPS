@@ -70,6 +70,17 @@ public:
 	UPROPERTY(EditAnywhere, Category="FSM")
 	float attackDelayTime = 2;
 
+	// 필요속성 : 초기값 체력
+	UPROPERTY(EditAnywhere, Category="FSM")
+	int32 initalHP = 5;
+	// 현재 체력
+	int32 hp = 0;
+	// 필요속성 : 피격대기시간
+	UPROPERTY(EditAnywhere, Category="FSM")
+	float damageDelayTime = 2;
+	// 필요속성 : 아래로 이동하는 속도
+	UPROPERTY(EditAnywhere, Category="FSM")
+	float dieMoveSpeed = 100.205f;
 public:	// 상태 함수
 	void IdleState();
 	void MoveState();

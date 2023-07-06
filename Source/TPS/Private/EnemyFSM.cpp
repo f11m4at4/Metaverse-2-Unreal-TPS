@@ -8,6 +8,7 @@
 #include <Math/UnrealMathUtility.h>
 #include <DrawDebugHelpers.h>
 #include "TPS.h"
+#include <Components/CapsuleComponent.h>
 
 // Sets default values for this component's properties
 UEnemyFSM::UEnemyFSM()
@@ -30,6 +31,8 @@ void UEnemyFSM::BeginPlay()
 	
 	// 나
 	me = Cast<AEnemy>(GetOwner());
+
+	hp = initalHP;
 }
 
 
@@ -138,18 +141,57 @@ void UEnemyFSM::AttackState()
 	}
 }
 
+// 일정시간 기다렸다가 상태를 대기로 전환하고 싶다.
 void UEnemyFSM::DamageState()
 {
-
+	// 1. 시간이 흘렀으니까
+	currentTime += GetWorld()->DeltaTimeSeconds;
+	// 2. 경과시간이 대기시간을 초과했으니까
+	if (currentTime > damageDelayTime)
+	{
+		// 3. 상태를 대기로 전환하고 싶다.
+		mState = EEnemyState::Idle;
+		currentTime = 0;
+	}
 }
 
+// 아래로 계속 이동하다가 눈에 안보이는 시점까지 내려가면
+// 없애고 싶다.
+// 필요속성 : 아래로 이동하는 속도
 void UEnemyFSM::DieState()
 {
-
+	//아래로 계속 이동하다가 P = P0 + vt
+	FVector P = me->GetActorLocation() + FVector::DownVector * dieMoveSpeed * GetWorld()->DeltaTimeSeconds;
+	me->SetActorLocation(P);
+	//눈에 안보이는 시점까지 내려가면
+	// Z 값이 -100 아래로 내려가면
+	if (P.Z < -100)
+	{
+		// 없애고 싶다.
+		me->Destroy();
+	}
 }
 
 // 피격시 호출될 콜백(이벤트) 함수
+// 피격을 받았을 때 
 void UEnemyFSM::OnDamageProcess()
 {
-	me->Destroy();
+	// 체력을 감소시키자
+	hp--;
+
+	currentTime = 0;
+	// 체력이 0 이상이면
+	if (hp > 0)
+	{
+		// 상태를 피격으로 전환하고 싶다.
+		mState = EEnemyState::Damage;
+	}
+	// 그렇지 않으면 
+	else 
+	{
+		// 상태를 Die 로 전환하고 싶다.
+		mState = EEnemyState::Die;
+		// 콜리전 꺼주기
+		me->GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	}
 }
