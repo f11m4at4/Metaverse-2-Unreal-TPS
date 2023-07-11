@@ -60,6 +60,9 @@ public:
 	// 총바꾸기
 	void ChangeGun(bool isGrenade);
 
+	// 달리기 이벤트 처리 함수 
+	void InputRun();
+
 	// 필요속성 : 총알공장
 	UPROPERTY(EditDefaultsOnly, Category="Bullet")
 	TSubclassOf<class ABullet> bulletFactory;
@@ -77,4 +80,14 @@ public:
 	// crosshair factory로부터 만들어진 인스턴스
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="UI")
 	class UUserWidget* crosshairUI;
+
+	// 걷기 속도
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="Settings")
+	float walkSpeed = 200;
+	// 뛰기 속도
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="Settings")
+	float runSpeed = 600;
+	// 다시 바뀔속도
+	float returnSpeed = 0;
+
 };
