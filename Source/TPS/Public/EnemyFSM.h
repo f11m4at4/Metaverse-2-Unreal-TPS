@@ -81,6 +81,12 @@ public:
 	// 필요속성 : 아래로 이동하는 속도
 	UPROPERTY(EditAnywhere, Category="FSM")
 	float dieMoveSpeed = 100.205f;
+
+public:	// Animation
+	UPROPERTY()
+	class UEnemyAnim* anim;
+
+
 public:	// 상태 함수
 	void IdleState();
 	void MoveState();

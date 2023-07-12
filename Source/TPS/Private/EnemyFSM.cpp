@@ -9,6 +9,7 @@
 #include <DrawDebugHelpers.h>
 #include "TPS.h"
 #include <Components/CapsuleComponent.h>
+#include "EnemyAnim.h"
 
 // Sets default values for this component's properties
 UEnemyFSM::UEnemyFSM()
@@ -31,6 +32,8 @@ void UEnemyFSM::BeginPlay()
 	
 	// 나
 	me = Cast<AEnemy>(GetOwner());
+	// 1. EnemyAnim 가 있어야한다.
+	anim = Cast<UEnemyAnim>(me->GetMesh()->GetAnimInstance());
 
 	hp = initalHP;
 }
@@ -46,6 +49,11 @@ void UEnemyFSM::TickComponent(float DeltaTime, ELevelTick TickType, FActorCompon
 	{
 		DrawDebugSphere(GetWorld(), me->GetActorLocation(), attackRange, 20, FColor::Red, false, -1, 0, 2);
 	}
+
+	// 현재 상태 출력
+	FString strState;
+	UEnum::GetValueAsString(mState, strState);
+	PRINT2SCREEN(TEXT("%s"), *strState);
 
 	// FSM 목차
 	switch (mState)
@@ -81,6 +89,8 @@ void UEnemyFSM::IdleState()
 		// 3. 상태를 이동으로 바꾸고 싶다.
 		mState = EEnemyState::Move;
 		currentTime = 0;
+		// 2. animState 에 MState 를 대입하고 싶다.
+		anim->animState = mState;
 	}
 }
 
@@ -103,6 +113,8 @@ void UEnemyFSM::MoveState()
 	{
 		// 1. 상태를 공격으로 전환하고 싶다.
 		mState = EEnemyState::Attack;
+		anim->animState = mState;
+		currentTime = attackDelayTime;
 	}
 
 	
@@ -129,6 +141,7 @@ void UEnemyFSM::AttackState()
 	{
 		currentTime = 0;
 		PRINT_LOG(TEXT("Attack!!!!!!!!!!!!!"));
+		anim->bAttackPlay = true;
 	}
 
 	// 타겟이 도망가면 상태를 이동으로 전환하고 싶다.
@@ -138,6 +151,7 @@ void UEnemyFSM::AttackState()
 	{
 		mState = EEnemyState::Move;
 		currentTime = 0;
+		anim->animState = mState;
 	}
 }
 
@@ -152,6 +166,7 @@ void UEnemyFSM::DamageState()
 		// 3. 상태를 대기로 전환하고 싶다.
 		mState = EEnemyState::Idle;
 		currentTime = 0;
+		anim->animState = mState;
 	}
 }
 
@@ -194,4 +209,5 @@ void UEnemyFSM::OnDamageProcess()
 		// 콜리전 꺼주기
 		me->GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 	}
+	anim->animState = mState;
 }

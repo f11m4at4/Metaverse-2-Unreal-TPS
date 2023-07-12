@@ -3,6 +3,8 @@
 
 #include "Enemy.h"
 #include "EnemyFSM.h"
+#include <GameFramework/CharacterMovementComponent.h>
+#include "EnemyAnim.h"
 
 // Sets default values
 AEnemy::AEnemy()
@@ -11,13 +13,26 @@ AEnemy::AEnemy()
 	PrimaryActorTick.bCanEverTick = true;
 
 	// Mesh 데이터 할당
-	ConstructorHelpers::FObjectFinder<USkeletalMesh> TempMesh(TEXT("/Script/Engine.SkeletalMesh'/Game/Characters/Mannequin_UE4/Meshes/SK_Mannequin.SK_Mannequin'"));
+	ConstructorHelpers::FObjectFinder<USkeletalMesh> TempMesh(TEXT("'/Game/Enemy/Model/vampire_a_lusth.vampire_a_lusth'"));
 
 	if (TempMesh.Succeeded())
 	{
 		GetMesh()->SetSkeletalMesh(TempMesh.Object);
 		GetMesh()->SetRelativeLocationAndRotation(FVector(0, 0, -90), FRotator(0, -90, 0));
+		GetMesh()->SetRelativeScale3D(FVector(0.84f));
+
+		
 	}
+
+	// ABP 할당
+	ConstructorHelpers::FClassFinder<UEnemyAnim> TempAnim(TEXT("/Script/Engine.AnimBlueprint'/Game/Blueprints/ABP_Enemy.ABP_Enemy_C'"));
+	if (TempAnim.Succeeded())
+	{
+		GetMesh()->SetAnimInstanceClass(TempAnim.Class);
+	}
+
+	// 이동방향으로 회전하기
+	GetCharacterMovement()->bOrientRotationToMovement = true;
 
 	// FSM
 	FSM = CreateDefaultSubobject<UEnemyFSM>(TEXT("FSM"));

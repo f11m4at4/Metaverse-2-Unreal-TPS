@@ -14,3 +14,5 @@ DECLARE_LOG_CATEGORY_EXTERN(TPSMsg, Log, All)
 
 // 주어진 포맷으로 메시지를 찍는 매크로
 #define PRINT_LOG(fmt, ...) UE_LOG(TPSMsg, Warning, TEXT("%s %s"), *APPINFO, *FString::Printf(fmt, ##__VA_ARGS__))
+
+#define PRINT2SCREEN(fmt, ...) GEngine->AddOnScreenDebugMessage(-1, 1, FColor::Red, FString::Printf(fmt, ##__VA_ARGS__))
