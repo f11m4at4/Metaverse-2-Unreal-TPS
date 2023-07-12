@@ -90,4 +90,10 @@ public:
 	// ´Ù½Ã ¹Ù²ð¼Óµµ
 	float returnSpeed = 0;
 
+	UPROPERTY(EditDefaultsOnly, Category="CameraShake")
+	TSubclassOf<class UCameraShakeBase> cameraShake;
+
+	// ÃÑ»ç¿îµå
+	UPROPERTY(EditDefaultsOnly, Category="Shoot")
+	class USoundBase* fireSound;
 };

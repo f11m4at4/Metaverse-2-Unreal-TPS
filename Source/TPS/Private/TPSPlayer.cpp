@@ -11,6 +11,8 @@
 #include <UMG/Public/Blueprint/UserWidget.h>
 #include "EnemyFSM.h"
 #include <GameFramework/CharacterMovementComponent.h>
+#include "PlayerAnim.h"
+#include <Camera/CameraShakeBase.h>
 
 // Sets default values
 ATPSPlayer::ATPSPlayer()
@@ -57,16 +59,25 @@ ATPSPlayer::ATPSPlayer()
 	}
 
 	sniperGunComp = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("sniperGunComp"));
-	sniperGunComp->SetupAttachment(GetMesh());
+	sniperGunComp->SetupAttachment(GetMesh(), TEXT("GunPosition"));
 	ConstructorHelpers::FObjectFinder<UStaticMesh> TempSniperMesh(TEXT("/Script/Engine.StaticMesh'/Game/SniperGun/sniper1.sniper1'"));
 	if (TempSniperMesh.Succeeded())
 	{
 		sniperGunComp->SetStaticMesh(TempSniperMesh.Object);
-		sniperGunComp->SetRelativeLocation(FVector(-30, 60, 110));
+		sniperGunComp->SetRelativeLocation(FVector(-50, 4.77f, 1));
+		sniperGunComp->SetRelativeRotation(FRotator(0, 93, 0));
 		sniperGunComp->SetRelativeScale3D(FVector(0.205f));
 	}
 
 	JumpMaxCount = 2;
+
+	// ÃÑ»ç¿îµå
+	ConstructorHelpers::FObjectFinder<USoundBase> TempSound(TEXT("/Script/Engine.SoundWave'/Game/SniperGun/Rifle.Rifle'"));
+
+	if (TempSound.Succeeded())
+	{
+		fireSound = TempSound.Object;
+	}
 }
 
 // Called when the game starts or when spawned
@@ -140,6 +151,18 @@ void ATPSPlayer::Lookup(float value)
 
 void ATPSPlayer::InputFire()
 {
+	// ÃÑ ¹ß»ç »ç¿îµå Àç»ý
+	UGameplayStatics::PlaySound2D(GetWorld(), fireSound);
+
+	// camera shake
+	auto pc = GetWorld()->GetFirstPlayerController();
+	pc->PlayerCameraManager->StartCameraShake(cameraShake);
+	// montage play
+	auto anim = Cast<UPlayerAnim>(GetMesh()->GetAnimInstance());
+	if (anim)
+	{
+		anim->PlayAttackAnimation();
+	}
 	// À¯ÅºÃÑ »ç¿ëÁßÀÏ¶§ À¯Åº ¹ß»ç
 	if (bUseGrenadeGun)
 	{

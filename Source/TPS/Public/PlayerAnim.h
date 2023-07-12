@@ -26,4 +26,10 @@ public:
 
 	// Tick 처럼 매프레임 갱신
 	virtual void NativeUpdateAnimation(float DeltaSeconds) override;
+
+	// 공격애니메이션 몽타주
+	UPROPERTY(EditDefaultsOnly, Category="AnimMontage")
+	class UAnimMontage* attackMontage;
+
+	void PlayAttackAnimation();
 };
