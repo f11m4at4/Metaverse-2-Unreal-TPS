@@ -71,7 +71,7 @@ void UEnemyFSM::TickComponent(float DeltaTime, ELevelTick TickType, FActorCompon
 		DamageState();
 		break;
 	case EEnemyState::Die:
-		//DieState();
+		DieState();
 		break;
 	}
 }
