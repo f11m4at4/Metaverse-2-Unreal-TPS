@@ -53,7 +53,7 @@ void UEnemyFSM::TickComponent(float DeltaTime, ELevelTick TickType, FActorCompon
 	// 현재 상태 출력
 	FString strState;
 	UEnum::GetValueAsString(mState, strState);
-	PRINT2SCREEN(TEXT("%s"), *strState);
+	//PRINT2SCREEN(TEXT("%s"), *strState);
 
 	// FSM 목차
 	switch (mState)
@@ -71,7 +71,7 @@ void UEnemyFSM::TickComponent(float DeltaTime, ELevelTick TickType, FActorCompon
 		DamageState();
 		break;
 	case EEnemyState::Die:
-		DieState();
+		//DieState();
 		break;
 	}
 }
@@ -200,6 +200,13 @@ void UEnemyFSM::OnDamageProcess()
 	{
 		// 상태를 피격으로 전환하고 싶다.
 		mState = EEnemyState::Damage;
+		// 애니메이션 피격으로 상태전환
+		anim->bDamage = true;
+		// 피격 애니메이션몽타주 재생
+		int32 index = FMath::RandRange(0, 1);
+		FString sectionName = FString::Printf(TEXT("Damage%d"), index);
+		anim->PlayDamageAnim(FName(*sectionName));
+		
 	}
 	// 그렇지 않으면 
 	else 
@@ -208,6 +215,8 @@ void UEnemyFSM::OnDamageProcess()
 		mState = EEnemyState::Die;
 		// 콜리전 꺼주기
 		me->GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+
+		anim->PlayDamageAnim(TEXT("Die"));
 	}
 	anim->animState = mState;
 }

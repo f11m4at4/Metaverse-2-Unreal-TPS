@@ -26,4 +26,13 @@ public:
 	// 공격 종료 이벤트가 호출되면 처리할 함수
 	UFUNCTION(BlueprintCallable, Category="FSM")
 	void OnAttackEndEvent();
+
+	// 피격 상태 전환 여부
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category="FSM")
+	bool bDamage = false;
+
+	// 피격 몽타주 처리함수 선언
+	UFUNCTION(BlueprintImplementableEvent, Category="FSM")
+	void PlayDamageAnim(FName sectionName);
+	
 };
