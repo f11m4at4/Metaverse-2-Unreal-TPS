@@ -36,4 +36,9 @@ public:
 	void PlayDamageAnim(FName sectionName);
 	
 	// DieEndNoti 이벤트가 들어오면 그때서야 DieState 가 동작하도록 하고싶다.
+	UFUNCTION()
+	void AnimNotify_DieEndNoti();
+
+	// DieState 실행해도 되는지 여부
+	bool isDiePlaying = false;
 };

@@ -175,6 +175,11 @@ void UEnemyFSM::DamageState()
 // 필요속성 : 아래로 이동하는 속도
 void UEnemyFSM::DieState()
 {
+	// 실행해도 된다고 안하면 아래내용 실행하지 말자.
+	if (anim->isDiePlaying == false)
+	{
+		return;
+	}
 	//아래로 계속 이동하다가 P = P0 + vt
 	FVector P = me->GetActorLocation() + FVector::DownVector * dieMoveSpeed * GetWorld()->DeltaTimeSeconds;
 	me->SetActorLocation(P);

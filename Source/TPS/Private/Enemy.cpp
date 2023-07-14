@@ -5,6 +5,7 @@
 #include "EnemyFSM.h"
 #include <GameFramework/CharacterMovementComponent.h>
 #include "EnemyAnim.h"
+#include <Components/CapsuleComponent.h>
 
 // Sets default values
 AEnemy::AEnemy()
@@ -34,6 +35,7 @@ AEnemy::AEnemy()
 	// 이동방향으로 회전하기
 	GetCharacterMovement()->bOrientRotationToMovement = true;
 
+	GetCapsuleComponent()->SetCollisionResponseToChannel(ECC_Visibility, ECR_Block);
 	// FSM
 	FSM = CreateDefaultSubobject<UEnemyFSM>(TEXT("FSM"));
 }

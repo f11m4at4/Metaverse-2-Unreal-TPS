@@ -58,7 +58,7 @@ public:
 
 	// 필요속성 : 공격범위
 	UPROPERTY(EditAnywhere, Category="FSM")
-	float attackRange = 2;
+	float attackRange = 205;
 
 	// 공격범위 시각화여부
 	UPROPERTY(EditAnywhere, Category="FSM")
