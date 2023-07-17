@@ -10,6 +10,7 @@
 #include "TPS.h"
 #include <Components/CapsuleComponent.h>
 #include "EnemyAnim.h"
+#include <AIModule/Classes/AIController.h>
 
 // Sets default values for this component's properties
 UEnemyFSM::UEnemyFSM()
@@ -36,6 +37,9 @@ void UEnemyFSM::BeginPlay()
 	anim = Cast<UEnemyAnim>(me->GetMesh()->GetAnimInstance());
 
 	hp = initalHP;
+
+	// AIController 할당하기
+	ai = Cast<AAIController>(me->GetController());
 }
 
 
@@ -98,11 +102,14 @@ void UEnemyFSM::IdleState()
 // 필요속성 : 타겟, 이동속도
 void UEnemyFSM::MoveState()
 {
-	FVector Direction = target->GetActorLocation() - me->GetActorLocation();
+	FVector dest = target->GetActorLocation();
+	FVector Direction = dest - me->GetActorLocation();
 	float distance = Direction.Length();
 	Direction.Normalize();
 
-	me->AddMovementInput(Direction);
+	ai->MoveToLocation(dest);
+
+	//me->AddMovementInput(Direction);
 
 	// 공격범위안에 들어오면 상태를 공격으로 전환하고 싶다.
 	// -> transition 조건
@@ -115,6 +122,8 @@ void UEnemyFSM::MoveState()
 		mState = EEnemyState::Attack;
 		anim->animState = mState;
 		currentTime = attackDelayTime;
+
+		ai->StopMovement();
 	}
 
 	

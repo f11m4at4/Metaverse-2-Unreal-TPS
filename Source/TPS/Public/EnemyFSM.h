@@ -86,6 +86,9 @@ public:	// Animation
 	UPROPERTY()
 	class UEnemyAnim* anim;
 
+	// ai controller for pathFinding
+	UPROPERTY()
+	class AAIController* ai;
 
 public:	// 상태 함수
 	void IdleState();
