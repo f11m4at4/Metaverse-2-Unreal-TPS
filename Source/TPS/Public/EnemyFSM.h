@@ -99,4 +99,8 @@ public:	// 상태 함수
 
 	// 피격시 호출될 콜백(이벤트) 함수
 	void OnDamageProcess();
+
+	FVector randomPos;
+	// 패트롤하기 위해서 이동가능 위치를 랜덤으로 찾아주기
+	bool GetRandomPosInNavMesh(FVector center, float radius, FVector& dest);
 };
