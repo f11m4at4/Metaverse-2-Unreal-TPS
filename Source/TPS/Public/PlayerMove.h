@@ -16,4 +16,8 @@ class TPS_API UPlayerMove : public UPlayerBaseComponent
 	
 public:
 	virtual void SetupInputBinding(class UInputComponent* PlayerInputComponent) override;
+
+	// 마우스에 따른 회전
+	void Turn(float value);
+	void Lookup(float value);
 };

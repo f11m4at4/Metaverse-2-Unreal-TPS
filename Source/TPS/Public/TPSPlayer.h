@@ -49,9 +49,7 @@ public:
 	// 좌우이동
 	void Horizontal(float value);
 	void Vertical(float value);
-	// 마우스에 따른 회전
-	void Turn(float value);
-	void Lookup(float value);
+
 	
 	// 총알발사 기능
 	void InputFire();

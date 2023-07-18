@@ -121,8 +121,7 @@ void ATPSPlayer::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent
 
 	PlayerInputComponent->BindAxis(TEXT("Horizontal"), this, &ATPSPlayer::Horizontal);
 	PlayerInputComponent->BindAxis(TEXT("Vertical"), this, &ATPSPlayer::Vertical);
-	PlayerInputComponent->BindAxis(TEXT("Turn"), this, &ATPSPlayer::Turn);
-	PlayerInputComponent->BindAxis(TEXT("Lookup"), this, &ATPSPlayer::Lookup);
+
 
 	PlayerInputComponent->BindAction(TEXT("Fire"), IE_Pressed, this, &ATPSPlayer::InputFire);
 
@@ -145,15 +144,7 @@ void ATPSPlayer::Vertical(float value)
 	AddMovementInput(GetActorForwardVector(), value);
 }
 
-void ATPSPlayer::Turn(float value)
-{
-	AddControllerYawInput(value);
-}
 
-void ATPSPlayer::Lookup(float value)
-{
-	AddControllerPitchInput(value);
-}
 
 void ATPSPlayer::InputFire()
 {
