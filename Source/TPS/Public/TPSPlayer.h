@@ -43,48 +43,10 @@ public:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	class UPlayerBaseComponent* playerMove;
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	class UPlayerBaseComponent* playerFire;
 
 public:
 	// 사용자 입력처리 함수
 
-
-	
-	// 총알발사 기능
-	void InputFire();
-
-	void OnEnemyHit(const FHitResult& hitInfo);
-
-	void ChangeToGrenade();
-	void ChangeToSniper();
-	// 총바꾸기
-	void ChangeGun(bool isGrenade);
-
-	
-
-	// 필요속성 : 총알공장
-	UPROPERTY(EditDefaultsOnly, Category="Bullet")
-	TSubclassOf<class ABullet> bulletFactory;
-
-	// 현재 유탄발사총을 사용중인지 기억 flag
-	bool bUseGrenadeGun = false;
-
-	UPROPERTY(EditDefaultsOnly, Category="Effect")
-	class UParticleSystem* bulletEffectFactory;
-
-	// crosshair ui 파일
-	UPROPERTY(EditDefaultsOnly, Category="UI")
-	TSubclassOf<class UUserWidget> crosshairUIFactory;
-
-	// crosshair factory로부터 만들어진 인스턴스
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="UI")
-	class UUserWidget* crosshairUI;
-
-	
-
-	UPROPERTY(EditDefaultsOnly, Category="CameraShake")
-	TSubclassOf<class UCameraShakeBase> cameraShake;
-
-	// 총사운드
-	UPROPERTY(EditDefaultsOnly, Category="Shoot")
-	class USoundBase* fireSound;
 };
