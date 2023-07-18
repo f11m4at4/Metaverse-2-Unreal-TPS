@@ -46,9 +46,7 @@ public:
 
 public:
 	// 사용자 입력처리 함수
-	// 좌우이동
-	void Horizontal(float value);
-	void Vertical(float value);
+
 
 	
 	// 총알발사 기능
@@ -61,8 +59,7 @@ public:
 	// 총바꾸기
 	void ChangeGun(bool isGrenade);
 
-	// 달리기 이벤트 처리 함수 
-	void InputRun();
+	
 
 	// 필요속성 : 총알공장
 	UPROPERTY(EditDefaultsOnly, Category="Bullet")
@@ -82,14 +79,7 @@ public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="UI")
 	class UUserWidget* crosshairUI;
 
-	// 걷기 속도
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="Settings")
-	float walkSpeed = 200;
-	// 뛰기 속도
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="Settings")
-	float runSpeed = 600;
-	// 다시 바뀔속도
-	float returnSpeed = 0;
+	
 
 	UPROPERTY(EditDefaultsOnly, Category="CameraShake")
 	TSubclassOf<class UCameraShakeBase> cameraShake;

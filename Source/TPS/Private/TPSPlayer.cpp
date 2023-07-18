@@ -88,9 +88,7 @@ void ATPSPlayer::BeginPlay()
 {
 	Super::BeginPlay();
 
-	// 초기 속도 설정
-	GetCharacterMovement()->MaxWalkSpeed = walkSpeed;
-	returnSpeed = walkSpeed;
+	
 
 	// crosshair ui 인스턴스 만들기
 	crosshairUI = CreateWidget(GetWorld(), crosshairUIFactory);
@@ -108,7 +106,7 @@ void ATPSPlayer::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	GetCharacterMovement()->MaxWalkSpeed = FMath::Lerp(GetCharacterMovement()->MaxWalkSpeed, returnSpeed, 5 * DeltaTime);
+	
 }
 
 // Called to bind functionality to input
@@ -119,8 +117,7 @@ void ATPSPlayer::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent
 	// 딱 한번 호출되는 함수
 	playerMove->SetupInputBinding(PlayerInputComponent);
 
-	PlayerInputComponent->BindAxis(TEXT("Horizontal"), this, &ATPSPlayer::Horizontal);
-	PlayerInputComponent->BindAxis(TEXT("Vertical"), this, &ATPSPlayer::Vertical);
+
 
 
 	PlayerInputComponent->BindAction(TEXT("Fire"), IE_Pressed, this, &ATPSPlayer::InputFire);
@@ -128,21 +125,12 @@ void ATPSPlayer::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent
 	PlayerInputComponent->BindAction(TEXT("GrenadeGun"), IE_Pressed, this, &ATPSPlayer::ChangeToGrenade);
 	PlayerInputComponent->BindAction(TEXT("SniperGun"), IE_Pressed, this, &ATPSPlayer::ChangeToSniper);
 
-	PlayerInputComponent->BindAction(TEXT("Run"), IE_Pressed, this, &ATPSPlayer::InputRun);
-	PlayerInputComponent->BindAction(TEXT("Run"), IE_Released, this, &ATPSPlayer::InputRun);
 
-	PlayerInputComponent->BindAction(TEXT("Jump"), IE_Pressed, this, &ATPSPlayer::Jump);
+
+	
 }
 
-void ATPSPlayer::Horizontal(float value)
-{
-	AddMovementInput(GetActorRightVector(), value);
-}
 
-void ATPSPlayer::Vertical(float value)
-{
-	AddMovementInput(GetActorForwardVector(), value);
-}
 
 
 
@@ -243,20 +231,5 @@ void ATPSPlayer::ChangeGun(bool isGrenade)
 	sniperGunComp->SetVisibility(!isGrenade);
 }
 
-void ATPSPlayer::InputRun()
-{
-	//auto movement = GetCharacterMovement();
-	// 만약 현재 달리기 상태라면 (released)
-	if (returnSpeed > walkSpeed)
-	{
-		// -> 걷기로 바꾸기
-		returnSpeed = walkSpeed;
-	}
-	// 그렇지않으면 (Pressed)
-	else
-	{
-		// -> 달리기로
-		returnSpeed = runSpeed;
-	}
-}
+
 
