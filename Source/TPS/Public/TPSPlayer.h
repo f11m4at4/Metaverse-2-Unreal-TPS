@@ -41,6 +41,9 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	class UStaticMeshComponent* sniperGunComp;
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	class UPlayerBaseComponent* playerMove;
+
 public:
 	// 사용자 입력처리 함수
 	// 좌우이동

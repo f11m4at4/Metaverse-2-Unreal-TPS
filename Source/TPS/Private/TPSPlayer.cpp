@@ -13,6 +13,7 @@
 #include <GameFramework/CharacterMovementComponent.h>
 #include "PlayerAnim.h"
 #include <Camera/CameraShakeBase.h>
+#include "PlayerMove.h"
 
 // Sets default values
 ATPSPlayer::ATPSPlayer()
@@ -78,6 +79,8 @@ ATPSPlayer::ATPSPlayer()
 	{
 		fireSound = TempSound.Object;
 	}
+
+	playerMove = CreateDefaultSubobject<UPlayerMove>(TEXT("playerMove"));
 }
 
 // Called when the game starts or when spawned
@@ -112,6 +115,9 @@ void ATPSPlayer::Tick(float DeltaTime)
 void ATPSPlayer::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
+
+	// 딱 한번 호출되는 함수
+	playerMove->SetupInputBinding(PlayerInputComponent);
 
 	PlayerInputComponent->BindAxis(TEXT("Horizontal"), this, &ATPSPlayer::Horizontal);
 	PlayerInputComponent->BindAxis(TEXT("Vertical"), this, &ATPSPlayer::Vertical);

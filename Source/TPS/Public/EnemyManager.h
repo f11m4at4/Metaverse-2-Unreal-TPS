@@ -39,4 +39,7 @@ public:
 public:
 	// 적 생성 함수
 	void CreateEnemy();
+
+	// 생성위치 동적으로 찾아서 할당하기
+	void FindSpawnPoints();
 };

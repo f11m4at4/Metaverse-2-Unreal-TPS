@@ -38,6 +38,8 @@ AEnemy::AEnemy()
 	GetCapsuleComponent()->SetCollisionResponseToChannel(ECC_Visibility, ECR_Block);
 	// FSM
 	FSM = CreateDefaultSubobject<UEnemyFSM>(TEXT("FSM"));
+
+	AutoPossessAI = EAutoPossessAI::PlacedInWorldOrSpawned;
 }
 
 // Called when the game starts or when spawned

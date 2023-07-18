@@ -262,6 +262,7 @@ void UEnemyFSM::OnDamageProcess()
 		anim->PlayDamageAnim(TEXT("Die"));
 	}
 	anim->animState = mState;
+	ai->StopMovement();
 }
 
 bool UEnemyFSM::GetRandomPosInNavMesh(FVector center, float radius, FVector& dest)
