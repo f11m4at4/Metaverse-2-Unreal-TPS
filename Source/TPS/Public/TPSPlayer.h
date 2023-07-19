@@ -51,4 +51,9 @@ public:
 public:
 	// delegate
 	FInputBindingDelegate onInputBindingDelegate;
+
+	// EnhancedInput resources
+	UPROPERTY(EditDefaultsOnly, Category="Input")
+	class UInputMappingContext* imc;
+
 };

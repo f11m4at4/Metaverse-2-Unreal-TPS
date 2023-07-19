@@ -16,6 +16,8 @@
 #include "PlayerMove.h"
 #include "PlayerFire.h"
 #include "TPS.h"
+#include <../Plugins/EnhancedInput/Source/EnhancedInput/Public/EnhancedInputSubsystems.h>
+#include <../Plugins/EnhancedInput/Source/EnhancedInput/Public/EnhancedInputComponent.h>
 
 // Sets default values
 ATPSPlayer::ATPSPlayer()
@@ -81,6 +83,16 @@ void ATPSPlayer::BeginPlay()
 {
 	Super::BeginPlay();
 
+	// 우리가 IMC 를 사용하겠다고 등록해주자.
+	auto pc = Cast<APlayerController>(GetController());
+	if (pc)
+	{
+		auto subSystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(pc->GetLocalPlayer());
+		if (subSystem)
+		{
+			subSystem->AddMappingContext(imc, 0);
+		}
+	}
 }
 
 // Called every frame
@@ -95,7 +107,6 @@ void ATPSPlayer::Tick(float DeltaTime)
 void ATPSPlayer::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
-	PRINT_INFO();
 
 	// 딱 한번 호출되는 함수
 	onInputBindingDelegate.Broadcast(PlayerInputComponent);

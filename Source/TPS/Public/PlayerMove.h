@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "PlayerBaseComponent.h"
+#include <../Plugins/EnhancedInput/Source/EnhancedInput/Public/InputActionValue.h>
 #include "PlayerMove.generated.h"
 
 /**
@@ -22,11 +23,13 @@ public:
 
 	virtual void SetupInputBinding(class UInputComponent* PlayerInputComponent) override;
 
+
 	// 마우스에 따른 회전
 	void Turn(float value);
 	void Lookup(float value);
 
 	// 좌우이동
+	void Move(const FInputActionValue& value);
 	void Horizontal(float value);
 	void Vertical(float value);
 	// 달리기 이벤트 처리 함수 
@@ -41,4 +44,10 @@ public:
 	float runSpeed = 600;
 	// 다시 바뀔속도
 	float returnSpeed = 0;
+
+
+public:
+	// InputActions
+	UPROPERTY(EditDefaultsOnly, Category="Input")
+	class UInputAction* ia_move;
 };

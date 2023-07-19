@@ -3,6 +3,7 @@
 
 #include "PlayerMove.h"
 #include "TPS.h"
+#include <../Plugins/EnhancedInput/Source/EnhancedInput/Public/EnhancedInputComponent.h>
 
 void UPlayerMove::BeginPlay()
 {
@@ -24,10 +25,17 @@ void UPlayerMove::TickComponent(float DeltaTime, ELevelTick TickType, FActorComp
 
 void UPlayerMove::SetupInputBinding(class UInputComponent* PlayerInputComponent)
 {
+	auto pInput = CastChecked<UEnhancedInputComponent>(PlayerInputComponent);
+	// Input Action 을 처리할 함수와 바인딩 해주기
+	if (pInput)
+	{
+		pInput->BindAction(ia_move, ETriggerEvent::Triggered, this, &UPlayerMove::Move);
+	}
+
 	PlayerInputComponent->BindAxis(TEXT("Turn"), this, &UPlayerMove::Turn);
 	PlayerInputComponent->BindAxis(TEXT("Lookup"), this, &UPlayerMove::Lookup);
-	PlayerInputComponent->BindAxis(TEXT("Horizontal"), this, &UPlayerMove::Horizontal);
-	PlayerInputComponent->BindAxis(TEXT("Vertical"), this, &UPlayerMove::Vertical);
+	/*PlayerInputComponent->BindAxis(TEXT("Horizontal"), this, &UPlayerMove::Horizontal);
+	PlayerInputComponent->BindAxis(TEXT("Vertical"), this, &UPlayerMove::Vertical);*/
 
 	PlayerInputComponent->BindAction(TEXT("Run"), IE_Pressed, this, &UPlayerMove::InputRun);
 	PlayerInputComponent->BindAction(TEXT("Run"), IE_Released, this, &UPlayerMove::InputRun);
@@ -43,6 +51,13 @@ void UPlayerMove::Turn(float value)
 void UPlayerMove::Lookup(float value)
 {
 	me->AddControllerPitchInput(value);
+}
+
+void UPlayerMove::Move(const FInputActionValue& value)
+{
+	FVector2D mValue = value.Get<FVector2D>();
+	me->AddMovementInput(me->GetActorRightVector(), mValue.X);
+	me->AddMovementInput(me->GetActorForwardVector(), mValue.Y);
 }
 
 void UPlayerMove::Horizontal(float value)
