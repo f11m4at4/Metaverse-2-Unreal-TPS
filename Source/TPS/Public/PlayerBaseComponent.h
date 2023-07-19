@@ -9,7 +9,7 @@
 #include "PlayerBaseComponent.generated.h"
 
 
-UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
+UCLASS( ClassGroup=(205), meta=(BlueprintSpawnableComponent) )
 class TPS_API UPlayerBaseComponent : public UActorComponent
 {
 	GENERATED_BODY()
@@ -19,6 +19,8 @@ public:
 	UPlayerBaseComponent();
 
 protected:
+	virtual void InitializeComponent() override;
+
 	// Called when the game starts
 	virtual void BeginPlay() override;
 

@@ -2,10 +2,13 @@
 
 
 #include "PlayerMove.h"
+#include "TPS.h"
 
 void UPlayerMove::BeginPlay()
 {
 	Super::BeginPlay();
+
+	// binding 하고싶다.
 
 	// 초기 속도 설정
 	moveComp->MaxWalkSpeed = walkSpeed;

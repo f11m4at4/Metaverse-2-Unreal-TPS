@@ -9,7 +9,7 @@
 /**
  * 
  */
-UCLASS()
+UCLASS( ClassGroup=(205), meta=(BlueprintSpawnableComponent) )
 class TPS_API UPlayerFire : public UPlayerBaseComponent
 {
 	GENERATED_BODY()

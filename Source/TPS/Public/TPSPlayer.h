@@ -6,6 +6,8 @@
 #include "GameFramework/Character.h"
 #include "TPSPlayer.generated.h"
 
+DECLARE_MULTICAST_DELEGATE_OneParam(FInputBindingDelegate, class UInputComponent*);
+
 // 사용자가 발사버튼을 누르면 총알을 발사하고 싶다.
 // 필요속성 : 총알공장
 UCLASS()
@@ -47,6 +49,6 @@ public:
 	class UPlayerBaseComponent* playerFire;
 
 public:
-	// 사용자 입력처리 함수
-
+	// delegate
+	FInputBindingDelegate onInputBindingDelegate;
 };

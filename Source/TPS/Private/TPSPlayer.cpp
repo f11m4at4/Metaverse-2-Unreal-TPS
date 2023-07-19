@@ -15,6 +15,7 @@
 #include <Camera/CameraShakeBase.h>
 #include "PlayerMove.h"
 #include "PlayerFire.h"
+#include "TPS.h"
 
 // Sets default values
 ATPSPlayer::ATPSPlayer()
@@ -71,13 +72,15 @@ ATPSPlayer::ATPSPlayer()
 	
 
 	playerMove = CreateDefaultSubobject<UPlayerMove>(TEXT("playerMove"));
-	playerFire = CreateDefaultSubobject<UPlayerFire>(TEXT("playerFire"));
+	/*playerFire = CreateDefaultSubobject<UPlayerFire>(TEXT("playerFire"));*/
 }
+
 
 // Called when the game starts or when spawned
 void ATPSPlayer::BeginPlay()
 {
 	Super::BeginPlay();
+
 }
 
 // Called every frame
@@ -92,10 +95,10 @@ void ATPSPlayer::Tick(float DeltaTime)
 void ATPSPlayer::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
+	PRINT_INFO();
 
 	// 딱 한번 호출되는 함수
-	playerMove->SetupInputBinding(PlayerInputComponent);
-	playerFire->SetupInputBinding(PlayerInputComponent);
+	onInputBindingDelegate.Broadcast(PlayerInputComponent);
 }
 
 
